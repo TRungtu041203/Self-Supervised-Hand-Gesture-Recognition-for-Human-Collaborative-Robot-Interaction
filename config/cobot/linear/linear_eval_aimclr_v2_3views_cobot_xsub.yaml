@@ -1,0 +1,56 @@
+work_dir: ./work_dir/cobot_3views_2D_xsub_medgap_aug1/linear_eval
+
+# initialize from your pretraining checkpoint
+weights: ./work_dir/cobot_3views_2D_xsub_medgap_aug1/pretext/epoch400_model.pt.
+ignore_weights: [encoder_q.fc, encoder_q_motion.fc, encoder_q_bone.fc, encoder_k, encoder_k_motion, encoder_k_bone, queue, queue_motion, queue_bone]
+
+# feeder
+train_feeder: feeder.ntu_feeder.Feeder_single
+train_feeder_args:
+  data_path: ./cobot_med_frame64/xsub/train_position.npy
+  label_path: ./cobot_med_frame64/xsub/train_label.pkl
+  shear_amplitude: -1
+  temperal_padding_ratio: -1
+  mmap: True
+  zero_z: True
+test_feeder: feeder.ntu_feeder.Feeder_single
+test_feeder_args:
+  data_path: ./cobot_med_frame64/xsub/val_position.npy
+  label_path: ./cobot_med_frame64/xsub/val_label.pkl
+  shear_amplitude: -1
+  temperal_padding_ratio: -1
+  mmap: True
+  zero_z: True
+
+# model
+model: net.aimclr_v2_3views.AimCLR_v2_3views
+model_args:
+  base_encoder: net.st_gcn.Model
+  pretrain: False
+  in_channels: 3
+  hidden_channels: 32
+  hidden_dim: 256
+  num_class: 19  # set to your COBOT class count
+  dropout: 0.5
+  graph_args:
+    layout: 'cobot'
+    strategy: 'distance'
+  edge_importance_weighting: True
+
+# optim
+nesterov: False
+weight_decay: 0.0
+base_lr: 3.0
+optimizer: SGD
+step: [80]
+
+# training
+device: [0]
+batch_size: 64
+test_batch_size: 64
+num_epoch: 250
+stream: 'all'
+
+# log
+save_interval: -1
+eval_interval: 5

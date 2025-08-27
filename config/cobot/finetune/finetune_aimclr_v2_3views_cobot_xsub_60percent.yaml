@@ -1,0 +1,65 @@
+work_dir: ./work_dir/cobot_3views_2D_xsub_medgap_aug1/finetune_60percent
+
+# initialize from your pretraining checkpoint
+weights: ./work_dir/cobot_3views_2D_xsub_medgap_aug1/pretext/epoch400_model.pt
+ignore_weights: [encoder_q.fc, encoder_q_motion.fc, encoder_q_bone.fc, encoder_k, encoder_k_motion, encoder_k_bone, queue, queue_motion, queue_bone]
+
+# feeder - using subset feeder for 60% data
+train_feeder: feeder.ntu_feeder_subset.Feeder_single_subset
+train_feeder_args:
+  data_path: ./cobot_med_frame64/xsub/train_position.npy
+  label_path: ./cobot_med_frame64/xsub/train_label.pkl
+  shear_amplitude: -1
+  temperal_padding_ratio: -1
+  mmap: True
+  zero_z: True
+  data_ratio: 0.6  # Use only 60% of training data
+  random_seed: 42  # For reproducible results
+
+test_feeder: feeder.ntu_feeder.Feeder_single
+test_feeder_args:
+  data_path: ./cobot_med_frame64/xsub/val_position.npy
+  label_path: ./cobot_med_frame64/xsub/val_label.pkl
+  shear_amplitude: -1
+  temperal_padding_ratio: -1
+  mmap: True
+  zero_z: True
+
+# model
+model: net.aimclr_v2_3views.AimCLR_v2_3views
+model_args:
+  base_encoder: net.st_gcn.Model
+  pretrain: False
+  in_channels: 3
+  hidden_channels: 32
+  hidden_dim: 256
+  num_class: 19  # set to your COBOT class count
+  dropout: 0.5
+  graph_args:
+    layout: 'cobot'
+    strategy: 'distance'
+  edge_importance_weighting: True
+
+# optim - Finetune settings with stability improvements
+nesterov: False
+weight_decay: 0.0001
+base_lr: 0.01  # Much lower learning rate for stability
+optimizer: SGD
+step: [80]
+
+# training
+device: [0]
+batch_size: 32  # Reduced batch size for stability
+test_batch_size: 32
+num_epoch: 100
+stream: 'all'
+
+# log
+save_interval: -1
+eval_interval: 5
+
+# Finetune: unfreeze all layers
+unfreeze_backbone: True
+
+# Gradient clipping to prevent NaN errors
+grad_clip: 1.0

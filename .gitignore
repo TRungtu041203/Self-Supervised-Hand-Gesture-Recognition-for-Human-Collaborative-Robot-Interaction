@@ -1,0 +1,130 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyTorch model weights and checkpoints
+*.pt
+*.pth
+*.ckpt
+work_dir/
+
+# MediaPipe weights and models
+mediapipe_weights/
+*.task
+
+# Data files and datasets
+cleaned_micro_gaps/
+cleaned_microgaps_v2/
+medium_gaps/
+cobot_dataset_frame50/
+cobot_dataset_frame64/
+cobot_frame64/
+cobot_med_frame64/
+ntu60_frame50/
+output/
+pose_new_v2/
+
+# Numpy arrays and pickle files (data)
+*.npy
+*.pkl
+*.npz
+
+# Video files
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.wmv
+
+# Audio files
+*.wav
+*.mp3
+*.flac
+*.aac
+
+# Image files (large datasets)
+*.jpg
+*.jpeg
+*.png
+*.bmp
+*.tiff
+*.gif
+# Keep small images like documentation
+!fig/*.png
+!visualization_results*/*.png
+
+# Compressed files
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Large annotation files (optional - uncomment if these are large)
+# Annotation_v4/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Environment and virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Results and outputs
+*.csv
+!test1.csv  # Keep small test files
+!fixed_predictions*.csv
+!improved_predictions.csv
+
+# TorchLight specific (if these are temporary)
+torchlight/*.egg
+torchlight/*.txt
+
+# Large directories that might be regenerated
+src.zip

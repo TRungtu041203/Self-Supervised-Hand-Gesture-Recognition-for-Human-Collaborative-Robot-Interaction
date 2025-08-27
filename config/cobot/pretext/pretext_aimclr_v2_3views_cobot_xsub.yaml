@@ -1,0 +1,62 @@
+work_dir: ./work_dir/cobot_3views_2D_xsub_medgap_aug1/pretext
+
+# resume training from checkpoint
+# weights: ./work_dir/cobot_3views_xsub/pretext/epoch35_model.pt
+# start_epoch: 35
+
+# feeder
+train_feeder: feeder.ntu_feeder.Feeder_triple
+train_feeder_args:                                            
+  data_path: ./cobot_med_frame64/xsub/train_position.npy
+  label_path: ./cobot_med_frame64/xsub/train_label.pkl
+  shear_amplitude: 0.2
+  temperal_padding_ratio: 6
+  mmap: True
+  aug_method: '1234'
+  zero_z: True
+
+# model
+model: net.aimclr_v2_3views.AimCLR_v2_3views
+model_args:
+  base_encoder: net.st_gcn.Model
+  pretrain: True
+  feature_dim: 128
+  queue_size: 8192
+  momentum: 0.999
+  Temperature: 0.2
+  mlp: True
+  in_channels: 3
+  hidden_channels: 32
+  hidden_dim: 256
+  num_class: 19  
+  dropout: 0.5
+  graph_args:
+    layout: 'cobot'  # Custom COBOT layout
+    strategy: 'distance'
+  edge_importance_weighting: True
+
+# optim
+nesterov: False
+weight_decay: 1e-4
+base_lr: 0.05
+optimizer: SGD
+step: [120]
+
+# training
+device: [0]  # Adjust based on your GPU
+batch_size: 64
+test_batch_size: 64
+num_epoch: 400
+start_epoch: 0
+stream: 'all'
+
+# cross training
+topk1: 4
+topk2: 20
+vote: 2
+mine_epoch: 40
+cross_epoch: 80
+
+# log
+save_interval: 5
+eval_interval: -1 
