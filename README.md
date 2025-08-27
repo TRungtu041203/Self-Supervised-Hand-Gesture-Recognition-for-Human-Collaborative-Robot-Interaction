@@ -31,13 +31,6 @@ $ python main.py linear_evaluation --config config/three-stream/linear/linear_ev
 $ python main.py linear_evaluation --config config/three-stream/linear/linear_eval_aimclr_v2_3views_ntu60_xsub.yaml
 ```
 
-## Linear Evaluation Results
-
-|          Model          | NTU 60 xsub (%) | NTU 60 xview (%) | PKU Part I (%) | PKU Part II (%) |
-| :---------------------: | :-------------: | :--------------: | :------------: | :-------------: |
-|        3s-AimCLR        |      79.18      |      84.02       |     87.79      |      38.52      |
-| 3s-AimCLR++ (This repo) |    **80.9**     |     **85.4**     |    **90.4**    |    **41.2**     |
-
 
 ## Citation
 Please cite our paper if you find this repository useful in your resesarch:
